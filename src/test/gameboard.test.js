@@ -1,6 +1,6 @@
 import Gameboard from '../gameboard';
 
-test.skip('empty board', () => {
+test('empty board', () => {
   const gameboard = Gameboard();
   expect(gameboard.getBoard()).toEqual([
     [null, null, null, null, null, null, null, null, null, null],
@@ -52,7 +52,7 @@ describe('gameboard factory', () => {
   });
 });
 
-describe.only('smaller fleet', () => {
+describe('smaller fleet', () => {
   const gameboard = Gameboard({
     destroyer: { grid: [3, 5], direction: 'y', length: 2 }
   });

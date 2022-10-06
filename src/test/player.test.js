@@ -33,7 +33,7 @@ test('player attack', () => {
   expect(AIBoard.getBoard()[5]).toEqual([null, 'carrier', null, null, false, null, null, null, null, null]);
 });
 
-test.only('AI Attack', () => {
+test('AI Attack', () => {
   AI.autoAttack(playerBoard);
   AI.autoAttack(playerBoard);
   expect(playerBoard.getBoard()).toEqual([
