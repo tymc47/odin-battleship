@@ -13,6 +13,8 @@
     },
     "rules": {
         "prettier/prettier": ["error"],
-        "no-console": "off"
-    }
+        "no-console": "off",
+        "allowForLoopAfterthoughts": true
+    },
+    "ignorePatterns": ["src/test/"]
 }
