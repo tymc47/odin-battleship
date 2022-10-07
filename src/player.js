@@ -1,36 +1,52 @@
-const Player = () => {
-  const attackedGrid = [];
+import Gameboard from './gameboard';
 
-  const checkAttack = (gridToAttack) => {
-    let attacked = false;
-    const [x1, y1] = gridToAttack;
-    if (attackedGrid) {
-      attackedGrid.forEach((grid) => {
-        const [x2, y2] = grid;
-        attacked = x1 === x2 && y1 === y2 ? true : false;
-      });
-    }
-    return attacked;
-  };
+let playerBoard = null;
+let aiBoard = null;
 
-  const attack = (grid, board) => {
-    board.receiveAttack(grid);
-  };
+const attackedGrid = [];
 
-  const autoAttack = (board) => {
-    let gridToAttack = [Math.floor(Math.random() * 9), Math.floor(Math.random() * 9)];
-
-    while (checkAttack(gridToAttack)) {
-      gridToAttack = [Math.floor(Math.random() * 9), Math.floor(Math.random() * 9)];
-    }
-    board.receiveAttack(gridToAttack);
-    attackedGrid.push(gridToAttack);
-  };
-
-  return {
-    attack,
-    autoAttack
-  };
+const presetFleet = {
+  carrier: { grid: [1, 1], direction: 'y', length: 5 },
+  battleship: { grid: [4, 1], direction: 'y', length: 4 },
+  cruiser: { grid: [2, 8], direction: 'x', length: 3 },
+  submarine: { grid: [7, 1], direction: 'y', length: 3 },
+  destroyer: { grid: [7, 5], direction: 'x', length: 2 }
 };
 
-export default Player;
+const createPlayer = (fleet = presetFleet) => {
+  playerBoard = Gameboard(fleet);
+  aiBoard = Gameboard(presetFleet);
+};
+
+const getBoard = (player) => {
+  return player === 'player' ? playerBoard : aiBoard;
+};
+
+const checkAttack = (gridToAttack) => {
+  let attacked = false;
+  const [x1, y1] = gridToAttack;
+  if (attackedGrid) {
+    attackedGrid.forEach((grid) => {
+      const [x2, y2] = grid;
+      if (x1 === x2 && y1 === y2) attacked = true;
+    });
+  }
+  return attacked;
+};
+
+const playerAttack = (grid) => {
+  return aiBoard.receiveAttack(grid);
+};
+
+const autoAttack = () => {
+  let gridToAttack = [Math.round(Math.random() * 9), Math.round(Math.random() * 9)];
+  while (checkAttack(gridToAttack)) {
+    console.log('Resaagin');
+    gridToAttack = [Math.round(Math.random() * 9), Math.round(Math.random() * 9)];
+  }
+  const result = playerBoard.receiveAttack(gridToAttack);
+  attackedGrid.push(gridToAttack);
+  return [gridToAttack, result];
+};
+
+export { createPlayer, getBoard, playerAttack, autoAttack };

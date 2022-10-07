@@ -45,7 +45,6 @@ const Gameboard = (position) => {
       validHit = true;
     } else if (board[y][x] === null) {
       board[y][x] = false;
-      validHit = true;
     }
 
     return validHit;
