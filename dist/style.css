@@ -49,6 +49,9 @@ body {
     height: 100%;
     width: 150px;
     background-color: aqua;
+    display: flex;
+    flex-direction: column;
+    row-gap: 1rem;
 }
 
 #restartbtn {
@@ -60,7 +63,7 @@ body {
 }
 
 
-.boardgrid.ship {
+.boardgrid[data-ship] {
     background-color: #262626;
 }
 

@@ -6,7 +6,7 @@ const preGame = () => {
   domController.initiatePreGame();
   createPlayer();
   domController.resetGrid();
-  domController.displayBoard(getBoard('p1'));
+  domController.enableSetFleet();
   domController.displayMsg('Press START when you are ready');
 };
 

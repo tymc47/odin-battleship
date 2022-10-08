@@ -3,6 +3,7 @@ import { newGame, attack, resetGame } from './gameController';
 const domController = (() => {
   const playerBoard = document.querySelector('.playerboard');
   const aiBoard = document.querySelector('.aiboard');
+  let currentBoardArray = [];
 
   const resetGrid = () => {
     playerBoard.innerHTML = '';
@@ -17,6 +18,15 @@ const domController = (() => {
         aiBoard.appendChild(grid.cloneNode());
       }
     }
+  };
+
+  const enableSetFleet = () => {
+    const grids = playerBoard.querySelectorAll('.boardgrid');
+    grids.forEach((grid) =>
+      grid.addEventListener('click', () => {
+        console.log('moving');
+      })
+    );
   };
 
   const initiatePreGame = () => {
@@ -48,12 +58,12 @@ const domController = (() => {
   };
 
   const displayBoard = (board) => {
-    const boardArray = board.getBoard();
+    currentBoardArray = board.getBoard();
     for (let i = 0; i < 10; i++) {
       for (let j = 0; j < 10; j++) {
-        if (boardArray[i][j] !== null) {
+        if (currentBoardArray[i][j] !== null) {
           const grid = playerBoard.querySelector(`[data-row="${i}"][data-col="${j}"]`);
-          grid.classList.add('ship');
+          grid.dataset.ship = currentBoardArray[i][j];
         }
       }
     }
@@ -82,7 +92,8 @@ const domController = (() => {
     displayAttack,
     displayMsg,
     disableGrid,
-    initiatePreGame
+    initiatePreGame,
+    enableSetFleet
   };
 })();
 
