@@ -45,6 +45,14 @@ body {
     column-gap: 1px;
 }
 
+.boardgrid.shiphover {
+    background-color: #262626;
+}
+
+.boardgrid.ship {
+    background-color: #262626;
+}
+
 .controlpanel {
     height: 100%;
     width: 150px;
@@ -63,9 +71,6 @@ body {
 }
 
 
-.boardgrid[data-ship] {
-    background-color: #262626;
-}
 
 .boardgrid.miss {
     background-color: green;
