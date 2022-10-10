@@ -1,13 +1,11 @@
 import domController from './domController';
-import { playerAttack, createPlayer, getBoard, autoAttack } from './player';
+import { playerAttack, getBoard, autoAttack, setFleet } from './player';
 
 const preGame = () => {
   // create player for initial loadout, disable attack
   domController.initiatePreGame();
-  createPlayer();
   domController.resetGrid();
-  domController.enableSetFleet();
-  domController.displayMsg('Press START when you are ready');
+  setFleet();
 };
 
 const newGame = () => {
@@ -21,16 +19,14 @@ const newGame = () => {
 };
 
 const attack = (event) => {
-  const grid = [];
-  grid.push(event.currentTarget.dataset.col);
-  grid.push(event.currentTarget.dataset.row);
+  const grid = [event.currentTarget.dataset.col, event.currentTarget.dataset.row];
 
   const result = playerAttack(grid);
 
   domController.displayAttack('player', grid, result);
-  //check if Win
-  //AI Auto Attack
+
   const result2 = autoAttack();
+
   domController.displayAttack('ai', result2[0], result2[1]);
   //check win
   if (getBoard('player').checkAllSunk() && getBoard('ai').checkAllSunk()) {
@@ -45,7 +41,7 @@ const attack = (event) => {
 };
 
 const resetGame = () => {
-  domController.disableGrid();
+  domController.disableAttack();
   domController.resetGrid();
   createPlayer();
   domController.displayBoard(getBoard('p1'));
@@ -65,7 +61,7 @@ const gameEnd = (winner) => {
 
   domController.displayMsg(msg);
   //diable all event listener
-  domController.disableGrid();
+  domController.disableAttack();
 };
 
 export { newGame, attack, preGame, resetGame };

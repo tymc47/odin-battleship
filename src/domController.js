@@ -1,4 +1,5 @@
 import { newGame, attack, resetGame } from './gameController';
+import { getBoard, placeShip, rotateFleet, setFleet } from './player';
 
 const domController = (() => {
   const playerBoard = document.querySelector('.playerboard');
@@ -20,18 +21,69 @@ const domController = (() => {
     }
   };
 
-  const enableSetFleet = () => {
+  const setShip = (ship) => {
     const grids = playerBoard.querySelectorAll('.boardgrid');
-    grids.forEach((grid) =>
-      grid.addEventListener('click', () => {
-        console.log('moving');
-      })
-    );
+
+    const getShipGrid = (event) => {
+      const x = event.currentTarget.dataset.col;
+      const y = event.currentTarget.dataset.row;
+      const shipGrid = [];
+      for (let i = 0; i < ship.shipLength; i++) {
+        let row, col;
+        if (ship.direction === 'x') {
+          row = parseInt(y);
+          col = parseInt(x) + i;
+        } else {
+          row = parseInt(y) + i;
+          col = parseInt(x);
+        }
+        if (row > 9 || col > 9) continue;
+        shipGrid.push([col, row]);
+      }
+      return shipGrid;
+    };
+
+    const hoverEffect = (event) => {
+      const array = getShipGrid(event);
+
+      array.forEach((grid) => {
+        const target = playerBoard.querySelector(`[data-row="${grid[1]}"][data-col="${grid[0]}"]`);
+        target.classList.toggle('shiphover');
+      });
+    };
+
+    const placement = (event) => {
+      const array = getShipGrid(event);
+      if (!placeShip(array, ship)) return;
+
+      array.forEach((grid) => {
+        const target = playerBoard.querySelector(`[data-row="${grid[1]}"][data-col="${grid[0]}"]`);
+        target.classList.add('ship');
+      });
+
+      grids.forEach((grid) => {
+        grid.removeEventListener('click', placement);
+        grid.removeEventListener('mouseover', hoverEffect);
+        grid.removeEventListener('mouseout', hoverEffect);
+      });
+
+      setFleet();
+    };
+
+    //if grid is set using random button, remove all listeners
+
+    grids.forEach((grid) => {
+      grid.addEventListener('mouseover', hoverEffect);
+      grid.addEventListener('mouseout', hoverEffect);
+      grid.addEventListener('click', placement);
+    });
   };
 
   const initiatePreGame = () => {
     const startBtn = document.querySelector('#startbtn');
     const restartBtn = document.querySelector('#restartbtn');
+    const rotateBtn = document.querySelector('#rotatebtn');
+    const randomBtn = document.querySelector('#randombtn');
 
     startBtn.addEventListener('click', () => {
       newGame();
@@ -44,6 +96,18 @@ const domController = (() => {
       restartBtn.style.display = 'none';
       startBtn.style.display = 'block';
     });
+
+    rotateBtn.addEventListener('click', rotateFleet);
+
+    randomBtn.addEventListener('click', () => {
+      resetGrid();
+      setFleet(true);
+      setShip();
+      displayBoard(getBoard());
+      const grids = playerBoard.querySelectorAll('.boardgrid');
+      playerBoard.innerHTML = '';
+      grids.forEach((grid) => playerBoard.appendChild(grid.cloneNode()));
+    });
   };
 
   // attack by clicking the grid
@@ -52,7 +116,7 @@ const domController = (() => {
     grids.forEach((grid) => grid.addEventListener('click', attack, { once: true }));
   };
 
-  const disableGrid = () => {
+  const disableAttack = () => {
     const grids = document.querySelectorAll('.aiboard > .boardgrid');
     grids.forEach((grid) => grid.removeEventListener('click', attack));
   };
@@ -63,7 +127,7 @@ const domController = (() => {
       for (let j = 0; j < 10; j++) {
         if (currentBoardArray[i][j] !== null) {
           const grid = playerBoard.querySelector(`[data-row="${i}"][data-col="${j}"]`);
-          grid.dataset.ship = currentBoardArray[i][j];
+          grid.classList.add('ship');
         }
       }
     }
@@ -91,9 +155,9 @@ const domController = (() => {
     enableAttack,
     displayAttack,
     displayMsg,
-    disableGrid,
+    disableAttack,
     initiatePreGame,
-    enableSetFleet
+    setShip
   };
 })();
 
