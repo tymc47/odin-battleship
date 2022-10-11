@@ -1,4 +1,4 @@
-import { newGame, attack, resetGame } from './gameController';
+import { playerTurn, preGame, resetGame } from './gameController';
 import { getBoard, placeShip, resetFleet, rotateFleet, setFleet } from './player';
 
 const domController = (() => {
@@ -97,7 +97,7 @@ const domController = (() => {
     });
 
     restartBtn.addEventListener('click', () => {
-      resetGame();
+      preGame();
       restartBtn.style.display = 'none';
       startBtn.style.display = 'block';
     });
@@ -124,12 +124,12 @@ const domController = (() => {
   // attack by clicking the grid
   const enableAttack = () => {
     const grids = document.querySelectorAll('.aiboard > .boardgrid');
-    grids.forEach((grid) => grid.addEventListener('click', attack, { once: true }));
+    grids.forEach((grid) => grid.addEventListener('click', playerTurn, { once: true }));
   };
 
   const disableAttack = () => {
     const grids = document.querySelectorAll('.aiboard > .boardgrid');
-    grids.forEach((grid) => grid.removeEventListener('click', attack));
+    grids.forEach((grid) => grid.removeEventListener('click', playerTurn));
   };
 
   const displayBoard = (board) => {
