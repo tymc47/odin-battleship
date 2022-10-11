@@ -7,6 +7,7 @@ let aiBoard = null;
 const attackedGrid = [];
 const placingGrid = [];
 
+let isBoardSet = false;
 let Fleet = {};
 
 const fleetToset = [
@@ -49,7 +50,9 @@ const autoAttack = () => {
 
 const resetFleet = () => {
   Fleet = {};
+  fleetToset.forEach((ship) => (ship.direction = 'x'));
   placingGrid.length = 0;
+  isBoardSet = false;
 };
 
 const setFleet = (random = false) => {
@@ -57,6 +60,8 @@ const setFleet = (random = false) => {
     playerBoard = Gameboard(Fleet);
     resetFleet();
     aiBoard = Gameboard(randomFleet());
+    domController.displayMsg('Your Fleet is set! Press START when you are ready!');
+    isBoardSet = true;
     return;
   }
 
@@ -151,4 +156,6 @@ const randomFleet = () => {
   return randomFleet();
 };
 
-export { getBoard, playerAttack, autoAttack, placeShip, setFleet, rotateFleet, resetFleet };
+const checkBoardSet = () => isBoardSet;
+
+export { getBoard, playerAttack, autoAttack, placeShip, setFleet, rotateFleet, resetFleet, checkBoardSet };

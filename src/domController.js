@@ -1,5 +1,5 @@
 import { playerTurn, preGame, resetGame } from './gameController';
-import { getBoard, placeShip, resetFleet, rotateFleet, setFleet } from './player';
+import { checkBoardSet, getBoard, placeShip, resetFleet, rotateFleet, setFleet } from './player';
 
 const domController = (() => {
   const playerBoard = document.querySelector('.playerboard');
@@ -81,24 +81,32 @@ const domController = (() => {
 
   const initiatePreGame = () => {
     const startBtn = document.querySelector('#startbtn');
-    const restartBtn = document.querySelector('#restartbtn');
+    const newgameBtn = document.querySelector('#newgamebtn');
     const rotateBtn = document.querySelector('#rotatebtn');
     const randomBtn = document.querySelector('#randombtn');
     const resetBtn = document.querySelector('#resetbtn');
 
     startBtn.addEventListener('click', () => {
       //start check
+      if (!checkBoardSet()) {
+        displayMsg('Please set up your Fleet before starting!');
+        return;
+      }
       enableAttack();
-      restartBtn.style.display = 'block';
+      newgameBtn.style.display = 'block';
       startBtn.style.display = 'none';
       rotateBtn.disabled = true;
       resetBtn.disabled = true;
       randomBtn.disabled = true;
+      displayMsg('Game starts! Click on the right plane to attack!');
     });
 
-    restartBtn.addEventListener('click', () => {
-      preGame();
-      restartBtn.style.display = 'none';
+    newgameBtn.addEventListener('click', () => {
+      resetGame();
+      rotateBtn.removeAttribute('disabled');
+      resetBtn.removeAttribute('disabled');
+      randomBtn.removeAttribute('disabled');
+      newgameBtn.style.display = 'none';
       startBtn.style.display = 'block';
     });
 

@@ -1,11 +1,12 @@
 import domController from './domController';
-import { playerAttack, getBoard, autoAttack, setFleet } from './player';
+import { playerAttack, getBoard, autoAttack, setFleet, resetFleet } from './player';
 
 const preGame = () => {
   domController.initiatePreGame();
   domController.resetGrid();
+  resetFleet();
   setFleet();
-  domController.displayMsg('Press START when you are ready');
+  domController.displayMsg('Click on the left plane to set your Fleet');
 };
 
 const playerTurn = (event) => {
@@ -33,25 +34,26 @@ const playerTurn = (event) => {
   }
 };
 
-const resetGame = () => {
-  domController.disableAttack();
-  preGame();
-};
-
 const gameEnd = (winner) => {
   let msg = '';
   //announce winner
   if (winner === 'player') {
-    msg = 'You win';
+    msg = 'You win!';
   } else if (winner === 'ai') {
-    msg = 'You lose';
+    msg = 'You lose!';
   } else {
-    msg = "It's a draw";
+    msg = "It's a draw!";
   }
 
   domController.displayMsg(msg);
   //diable all event listener
   domController.disableAttack();
+};
+
+const resetGame = () => {
+  domController.resetGrid();
+  resetFleet();
+  setFleet();
 };
 
 export { playerTurn, preGame, resetGame };
