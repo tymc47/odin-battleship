@@ -10,26 +10,31 @@
 </head>
 <body>
     <div class="banner">
-        <h1 id="title">BattleShip</h1>
+        <h1 id="title">Battleship</h1>
     </div>
 
     <div class="main">
         <div class="msg"></div>
         <div class="boardcontainer">
-            <div class="playerboard">
-                
+            <div class="rightside">
+                <div class="playerboard"></div>
+                <div class="boardtitle">Your Fleet</div>
             </div>
             <div class="controlpanel">
                 <button id="rotatebtn">Rotate</button>
-                <button id="resetbtn">Reset Fleet</button>
-                <button id="randombtn">Random Fleet</button>
+                <button id="resetbtn">Reset</button>
+                <button id="randombtn">Random</button>
                 <button id="startbtn">Start</button>
                 <button id="newgamebtn">New Game</button>
 
             </div>
-            <div class="aiboard">
-
+            <div class="leftside">
+                <div class="aiboard"></div>
+                <div class="boardtitle">Computer's Fleet</div>
             </div>
+        </div>
+        <div class="footer">
+            <h3>Learn how to play <a href="https://en.wikipedia.org/wiki/Battleship_(game)" target="_blank">here</a></h3>
         </div>
     </div>
 </body>

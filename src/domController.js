@@ -126,6 +126,7 @@ const domController = (() => {
       resetGrid();
       resetFleet();
       setFleet();
+      displayMsg('Click on the left plane to set your Fleet');
     });
   };
 

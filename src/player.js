@@ -5,6 +5,7 @@ let playerBoard = null;
 let aiBoard = null;
 
 const attackedGrid = [];
+const gridtoTry = [];
 const placingGrid = [];
 
 let isBoardSet = false;
@@ -22,7 +23,7 @@ const getBoard = (player = 'player') => {
   return player === 'player' ? playerBoard : aiBoard;
 };
 
-const checkAttack = (gridToAttack) => {
+const isAttacked = (gridToAttack) => {
   let attacked = false;
   const [x1, y1] = gridToAttack;
   if (attackedGrid) {
@@ -39,12 +40,32 @@ const playerAttack = (grid) => {
 };
 
 const autoAttack = () => {
-  let gridToAttack = [Math.round(Math.random() * 9), Math.round(Math.random() * 9)];
-  while (checkAttack(gridToAttack)) {
-    gridToAttack = [Math.round(Math.random() * 9), Math.round(Math.random() * 9)];
+  let gridToAttack =
+    gridtoTry.length === 0 ? [Math.round(Math.random() * 9), Math.round(Math.random() * 9)] : gridtoTry.shift();
+
+  if (isAttacked(gridToAttack)) {
+    console.log('again');
+    return autoAttack();
   }
+
   const result = playerBoard.receiveAttack(gridToAttack);
   attackedGrid.push(gridToAttack);
+
+  if (result) {
+    //add adjacent square to try
+    const [x, y] = gridToAttack;
+    if (x + 1 <= 9 && !isAttacked([x + 1, y])) gridtoTry.push([x + 1, y]);
+    if (x - 1 >= 0 && !isAttacked([x - 1, y])) gridtoTry.push([x - 1, y]);
+    if (y + 1 <= 9 && !isAttacked([x, y + 1])) gridtoTry.push([x, y + 1]);
+    if (y - 1 >= 0 && !isAttacked([x, y - 1])) gridtoTry.push([x, y - 1]);
+
+    //add diagonal square to attacked array for skipping;
+    if (x + 1 <= 9 && y + 1 <= 9 && !isAttacked([x + 1, y + 1])) attackedGrid.push([x + 1, y + 1]);
+    if (x - 1 >= 0 && y - 1 >= 0 && !isAttacked([x - 1, y - 1])) attackedGrid.push([x - 1, y - 1]);
+    if (x - 1 >= 0 && y + 1 <= 9 && !isAttacked([x - 1, y + 1])) attackedGrid.push([x - 1, y + 1]);
+    if (x + 1 <= 9 && y - 1 >= 0 && !isAttacked([x + 1, y - 1])) attackedGrid.push([x + 1, y - 1]);
+  }
+  console.log(gridToAttack);
   return [gridToAttack, result];
 };
 
