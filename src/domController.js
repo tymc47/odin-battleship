@@ -1,5 +1,5 @@
 import { newGame, attack, resetGame } from './gameController';
-import { getBoard, placeShip, rotateFleet, setFleet } from './player';
+import { getBoard, placeShip, resetFleet, rotateFleet, setFleet } from './player';
 
 const domController = (() => {
   const playerBoard = document.querySelector('.playerboard');
@@ -84,11 +84,16 @@ const domController = (() => {
     const restartBtn = document.querySelector('#restartbtn');
     const rotateBtn = document.querySelector('#rotatebtn');
     const randomBtn = document.querySelector('#randombtn');
+    const resetBtn = document.querySelector('#resetbtn');
 
     startBtn.addEventListener('click', () => {
-      newGame();
+      //start check
+      enableAttack();
       restartBtn.style.display = 'block';
       startBtn.style.display = 'none';
+      rotateBtn.disabled = true;
+      resetBtn.disabled = true;
+      randomBtn.disabled = true;
     });
 
     restartBtn.addEventListener('click', () => {
@@ -107,6 +112,12 @@ const domController = (() => {
       const grids = playerBoard.querySelectorAll('.boardgrid');
       playerBoard.innerHTML = '';
       grids.forEach((grid) => playerBoard.appendChild(grid.cloneNode()));
+    });
+
+    resetBtn.addEventListener('click', () => {
+      resetGrid();
+      resetFleet();
+      setFleet();
     });
   };
 

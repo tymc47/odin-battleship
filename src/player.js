@@ -47,11 +47,15 @@ const autoAttack = () => {
   return [gridToAttack, result];
 };
 
+const resetFleet = () => {
+  Fleet = {};
+  placingGrid.length = 0;
+};
+
 const setFleet = (random = false) => {
   if (fleetToset.length === Object.keys(Fleet).length) {
     playerBoard = Gameboard(Fleet);
-    placingGrid.length = 0;
-    Fleet = {};
+    resetFleet();
     aiBoard = Gameboard(randomFleet());
     return;
   }
@@ -147,4 +151,4 @@ const randomFleet = () => {
   return randomFleet();
 };
 
-export { getBoard, playerAttack, autoAttack, placeShip, setFleet, rotateFleet };
+export { getBoard, playerAttack, autoAttack, placeShip, setFleet, rotateFleet, resetFleet };
