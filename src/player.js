@@ -40,6 +40,7 @@ const playerAttack = (grid) => {
 };
 
 const autoAttack = () => {
+  console.log(gridtoTry);
   let gridToAttack =
     gridtoTry.length === 0 ? [Math.round(Math.random() * 9), Math.round(Math.random() * 9)] : gridtoTry.shift();
 
@@ -74,6 +75,8 @@ const resetFleet = () => {
   fleetToset.forEach((ship) => (ship.direction = 'x'));
   placingGrid.length = 0;
   isBoardSet = false;
+  gridtoTry.length = 0;
+  attackedGrid.length = 0;
 };
 
 const setFleet = (random = false) => {
